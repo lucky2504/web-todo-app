@@ -1,8 +1,9 @@
 #from functions import the pre-defined functions
+#front end is the code base that builds the user interface - command line interface or GUI
+#back end processes the data and is decoupled from front end
 
 import ToDoApp.functions  #Local module - written by developer
 import time #Standard module - written by Python code developers
-#complete list of Python modules are present in the link
 
 now = time.strftime("%b %d, %Y %H:%M:%S")
 print("It is",now)
