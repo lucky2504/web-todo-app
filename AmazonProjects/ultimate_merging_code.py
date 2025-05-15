@@ -3,32 +3,75 @@
 import win32com.client
 import os
 import Functions as fu
+from numpy.matlib import empty
 
 excel = None
 wb = None
 
 try:
-    #Opening the workbook
+    # Get the workbook name
     filepath = input("Please provide the filepath to the workbook: ")
+
+    # Opening the workbook
     file_path = os.path.abspath(filepath) # Get absolute path of the Excel file
     excel = win32com.client.Dispatch("Excel.Application") # Create Excel application object
     excel.Visible = True # Make Excel visible
     wb = excel.Workbooks.Open(file_path) # Open the workbook
 
-    #Build predicate list
-    predicate_sheet = wb.Worksheets(input("Please provide the name of the predicate sheet: ")) #ask for predicate sheet name and open it
-    predicate_list = fu.get_predicate_list(predicate_sheet)
+    # Build predicate list
+    predicate_sheet = wb.Worksheets(input("Please provide the name of the predicate sheet: "))  # ask for predicate sheet name and open it
+    predicate_start_col = ord(input("Please provide the start column of predicate data (excluding predicate column): ").upper())
+    predicate_end_col = ord(input("Please provide the end column of predicate data: ").upper())
+    pred_column_list = [chr(i) for i in range(predicate_start_col, predicate_end_col + 1)] # Create list using list comprehension
+    print("Attribute columns of predicate data: ")
+    print(pred_column_list)
+
+    pol_pred = "predicate"
+    predicate_list = fu.get_pol_pred_list(predicate_sheet,pred_column_list,pol_pred)
     print(predicate_list)
 
-    #Build policy list
-    policy_sheet = wb.Worksheets(input("Please provide the name of the policy sheet: "))  # ask for policy sheet name and open it
-    Policy_list = fu.get_policy_list(policy_sheet)
-    # Print both lists
-    print("Policy List:")
-    print(Policy_list)
+    #printing predicate data in new sheet
+    # Add new worksheet
+    ws = wb.Sheets.Add()
+    ws.Name = pol_pred
+    # Write to Excel starting from A1
+    for i, row_data in enumerate(predicate_list, start=1):
+        for j, value in enumerate(row_data):
+            col = chr(ord('A') + j )  # from col A
+            cell = f"{col}{i}"
+            ws.Range(cell).Value = str(value)[:254]
 
+    # Build policy list
+    policy_sheet = wb.Worksheets(input("Please provide the name of the policy sheet: "))  # ask for policy sheet name and open it
+    pol_start_col = ord(input("Please provide the start column of policy data (excluding policy name column): ").upper())
+    pol_end_col = ord(input("Please provide the end column of policy data: ").upper())
+    pol_column_list = [chr(i) for i in range(pol_start_col, pol_end_col + 1)] # Create list using list comprehension
+    print("Attribute columns of policy data: ")
+    print(pol_column_list)
+
+    pol_pred = "policy"
+    Policy_list = fu.get_pol_pred_list(policy_sheet,pol_column_list,pol_pred)
+    # Print both lists
     for item in Policy_list:
         print(item)
+
+    #printing policy data in new sheet
+    # Add new worksheet
+    ws = wb.Sheets.Add()
+    ws.Name = pol_pred
+    # Write to Excel starting from A1
+    for i, row_data in enumerate(Policy_list, start=1):
+        for j, value in enumerate(row_data):
+            # Convert column number to letter (O=15, P=16, Q=17)
+            col = chr(ord('A') + j )  # from col A
+            cell = f"{col}{i}"
+            ws.Range(cell).Value = str(value)[:254]
+
+    ask_user = input("Do you want to merge policy and predicate data? Y/N: ")
+    if ask_user == 'Y':
+        pass
+    else:
+        quit()
 
     E2EList = []
     for policy_line in Policy_list:

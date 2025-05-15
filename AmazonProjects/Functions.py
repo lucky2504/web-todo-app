@@ -1,72 +1,11 @@
 #Functions for policy and predicate data merging
 from itertools import product
 
-def get_predicate_list(predicatesheet):
-    sheet = predicatesheet
-    # Find the last row in column C
-    last_row = sheet.Cells(sheet.Rows.Count, "A").End(-4162).Row
-
-    predicates_list = []
-    # Process each row to remove gaps
-    for row in range(1, last_row + 1):
-        print(f"Processing row number {row} of predicate sheet")
-        predicates_line = []
-
-        # Check if first column had header as predicate
-        if sheet.Range(f"A{row}").Value == "predicate":
-            predicate_row = row
-            #predicate string
-            value = sheet.Range(f"A{row}").Value
-            predicates_line.append(value)
-
-            #attr string
-            value = ""
-            for col in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']:
-                attr = sheet.Range(f"{col}{row}").Value
-
-                if attr is None:
-                    pass #skip empty cells
-                elif attr == "Output":
-                    #Output String
-                    predicates_line.append(attr)
-                    value = value[:-2]
-                elif attr != "":
-                    value = value + attr + "; "
-            predicates_line.append(value)
-        else:
-            # predicate string
-            value = sheet.Range(f"A{row}").Value
-            predicates_line.append(value)
-
-            # attr string
-            value = ""
-            for col in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']:
-                attr = sheet.Range(f"{col}{row}").Value
-                header_attr = sheet.Range(f"{col}{predicate_row}").Value
-
-                if attr is None:
-                    pass  # skip empty cells
-                elif header_attr == "Output":
-                        # Output String
-                        predicates_line.append(attr)
-                        value = value[:-2]
-                elif attr != "":
-                        value = value + sheet.Range(f"{col}{predicate_row}").Value + ": " + attr + "; "
-            predicates_line.append(value)
-        predicates_list.append(predicates_line)
-
-    # Write to Excel starting from O1
-    for i, row_data in enumerate(predicates_list, start=1):
-        for j, value in enumerate(row_data):
-            # Convert column number to letter (O=15, P=16, Q=17)
-            col = chr(ord('N') + j + 1)  # N + 1 = O, and so on
-            cell = f"{col}{i}"
-            sheet.Range(cell).Value = str(value)[:254]
-    return predicates_list
-
-def get_policy_list(policysheet):
+def get_pol_pred_list(policysheet, pol_pred_column_list, pol_pred):
     # Select the sheet with "policies" data
     sheet = policysheet
+    col_list = pol_pred_column_list
+    po_pr = pol_pred
 
     # Find the last row in column A
     last_row = sheet.Cells(sheet.Rows.Count, "A").End(-4162).Row
@@ -79,7 +18,7 @@ def get_policy_list(policysheet):
         policy_line = []
         end_to_end_line = []
         # Check if first column had header as policy
-        if sheet.Range(f"A{row}").Value == "policy":
+        if sheet.Range(f"A{row}").Value == po_pr:
             policy_row = row
             #policy string
             value = sheet.Range(f"A{row}").Value
@@ -87,7 +26,7 @@ def get_policy_list(policysheet):
 
             #attr string
             value = ""
-            for col in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']:
+            for col in col_list:
                 attr = sheet.Range(f"{col}{row}").Value
 
                 if attr is None:
@@ -106,7 +45,7 @@ def get_policy_list(policysheet):
 
             # attr string
             value = ""
-            for col in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']:
+            for col in col_list:
                 attr = sheet.Range(f"{col}{row}").Value
                 header_attr = sheet.Range(f"{col}{policy_row}").Value
 
@@ -121,17 +60,6 @@ def get_policy_list(policysheet):
 
             policy_line.append(value)
         policy_list.append(policy_line)
-
-    # Write to Excel starting from O1
-    for i, row_data in enumerate(policy_list, start=1):
-        for j, value in enumerate(row_data):
-            # Convert column number to letter (O=15, P=16, Q=17)
-            col = chr(ord('N') + j + 1)  # N + 1 = O, and so on
-            cell = f"{col}{i}"
-            sheet.Range(cell).Value = str(value)[:254]
-    #Write E2E line items in column S
-    for row, line_item in enumerate(end_to_end_line_item_list, start=1):
-        sheet.Range(f"S{row}").Value = line_item
 
     return policy_list
 
@@ -247,5 +175,3 @@ def flatten_nested_list(nested_list):
         # print("appended_line")
         # print([*base, f"{pred}"])
     return nested_list
-
-
