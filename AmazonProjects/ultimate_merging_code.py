@@ -3,7 +3,6 @@
 import win32com.client
 import os
 import Functions as fu
-from numpy.matlib import empty
 
 excel = None
 wb = None
@@ -79,14 +78,16 @@ try:
         try:
             if policy_line[0].lower() == "policy":
                 E2Epolicyline = policy_line
+                E2Epolicyline.append(policy_line[2])
                 # print("policy line")
             elif "COUNT  " not in policy_line[2]:
                 E2Epolicyline = policy_line
+                E2Epolicyline.append(policy_line[2])
                 # print("policy line")
             else:
                 # print("not policy line")
                 E2Epolicyline = []
-                E2Epolicyline = [policy_line[0], policy_line[1]]
+                E2Epolicyline = policy_line
 
                 attr_header_attr = policy_line[2].split("; ")
                 attr_line = []
@@ -112,7 +113,7 @@ try:
             print(f"Error processing line: {policy_line}")
             print(f"Error message: {str(e)}")
 
-    #print(E2EList)
+    print(E2EList)
     # Add new worksheet
     ws = wb.Sheets.Add()
     ws.Name = "expanded_data"
@@ -127,9 +128,22 @@ try:
 
             for col, value in enumerate(item, start=1):
                 ws.Cells(row, col).Value = value[:254]
-                if col == 3:
+                if col == 4:
+                    attr_headers = []
                     attributes = value.split("; ")
-                    for colu, value in enumerate(attributes, start=4):
+                    for item in attributes:
+                        if ": " in item:
+                            attr_header = item.split(": ")[0]
+                            attr_headers.append(attr_header)
+                        else:
+                            pass
+
+                    if attr_headers == []:
+                        pass
+                    else:
+                        attr_h = list(set(attr_headers)) #Remove duplicates from attr headers
+                        ws.Cells(row, 5).Value = fu.list_to_string(attr_h)[:254] #Convert list into string and paste in col 5
+                    for colu, value in enumerate(attributes, start=6):
                         ws.Cells(row, colu).Value = value[:254]
             row += 1
 

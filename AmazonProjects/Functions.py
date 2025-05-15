@@ -113,17 +113,17 @@ def get_matching_predicates(predicate_list, search_items):
 
 
 def flatten_nested_list(nested_list):
-    base = nested_list[:2]  # First two elements are always base elements
+    base = nested_list[:3]  # First two elements are always base elements
     # print("base: ")
     # print(base)
     # print("nestedlist2: ")
     # print(nested_list[2])
     # Check if third item is a list or not
-    if not isinstance(nested_list[2], list):
+    if not isinstance(nested_list[3], list):
         # If not a list, return single item with the third element as is
         return [nested_list]
 
-    predicates = nested_list[2]  # List of predicates
+    predicates = nested_list[3]  # List of predicates
     # print("predicates: ")
     # print(predicates)
 
@@ -175,3 +175,6 @@ def flatten_nested_list(nested_list):
         # print("appended_line")
         # print([*base, f"{pred}"])
     return nested_list
+
+def list_to_string(lst):
+    return ', '.join(map(str, lst))
