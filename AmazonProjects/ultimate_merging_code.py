@@ -27,6 +27,7 @@ try:
 
     pol_pred = "predicate"
     predicate_list = fu.get_pol_pred_list(predicate_sheet,pred_column_list,pol_pred)
+    print("Predicate List: ")
     print(predicate_list)
 
     #printing predicate data in new sheet
@@ -50,9 +51,8 @@ try:
 
     pol_pred = "policy"
     Policy_list = fu.get_pol_pred_list(policy_sheet,pol_column_list,pol_pred)
-    # Print both lists
-    for item in Policy_list:
-        print(item)
+    print("Policy List: ")
+    print(Policy_list)
 
     #printing policy data in new sheet
     # Add new worksheet
@@ -74,7 +74,7 @@ try:
 
     E2EList = []
     for policy_line in Policy_list:
-        print(f"Policy line lower is {policy_line[0].lower()}")
+        #print(f"Policy line lower is {policy_line[0].lower()}")
         try:
             if policy_line[0].lower() == "policy":
                 E2Epolicyline = policy_line
@@ -100,6 +100,10 @@ try:
                         # print(search_items)
                         complete_line = fu.get_matching_predicates(predicate_list, search_items)
                         # print(complete_line)
+                        if complete_line == []:
+                            complete_line = [f"Predicate values did not match for {attr}"]
+                        else:
+                            pass
                         attr_line.append(complete_line)
                 E2Epolicyline.append(attr_line)
 
@@ -113,6 +117,7 @@ try:
             print(f"Error processing line: {policy_line}")
             print(f"Error message: {str(e)}")
 
+    print("E2E List: ")
     print(E2EList)
     # Add new worksheet
     ws = wb.Sheets.Add()
@@ -124,6 +129,7 @@ try:
         flattened_items = fu.flatten_nested_list(policy_item)
         for item in flattened_items:
             expanded_list.append(item)
+            print("Flattened item: ")
             print(item)
 
             for col, value in enumerate(item, start=1):
@@ -147,7 +153,8 @@ try:
                         ws.Cells(row, colu).Value = value[:254]
             row += 1
 
-    #print(expanded_list)
+    print("Expanded List: ")
+    print(expanded_list)
     print("\nSuccessfully processed all rows")
     print(f"Data written to sheet expanded_data")
 

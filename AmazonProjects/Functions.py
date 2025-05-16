@@ -14,7 +14,7 @@ def get_pol_pred_list(policysheet, pol_pred_column_list, pol_pred):
     end_to_end_line_item_list = []
     # Process each row to build the policy_list line item
     for row in range(1, last_row + 1):
-        print(f"Processing {row}")
+        #print(f"Processing {row}")
         policy_line = []
         end_to_end_line = []
         # Check if first column had header as policy
