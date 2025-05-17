@@ -6,13 +6,26 @@ import FreeSimpleGUI as sg
 
 #Child objects to build parts of window
 label = sg.Text("Type in a ToDo")
-input_box = sg.InputText(tooltip = "Enter todo")
+input_box = sg.InputText(tooltip = "Enter todo", key="todo")
 add_button = sg.Button("Add")
 
 window = sg.Window('My To-Do App',
                    layout=[[label], [input_box, add_button]],
                    font=('Helvetica',20)) #Parent object containing all the above objects
-window.read() #Displays the window
+
+while True:
+    event, values = window.read() #Displays the window
+    print(event)
+    print(values)
+    match event:
+        case "Add":
+            todos = functions.get_todos()
+            new_todo = values['todo'] + "\n" #todo key output of input_box
+            todos.append(new_todo)
+            functions.write_todos(todos)
+        case sg.WIN_CLOSED:
+            break
+
 window.close()
 
 
