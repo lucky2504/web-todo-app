@@ -1,7 +1,5 @@
-Clean
-Catch
-Pack
-Hit
+Learn Python
+Complete upto week 20
 Program
 Fight
 Code
@@ -13,3 +11,5 @@ Make dal
 Make rice
 Sleep today
 Build gui
+Master Python now
+Learn to build a window
