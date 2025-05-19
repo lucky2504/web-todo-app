@@ -178,3 +178,75 @@ def flatten_nested_list(nested_list):
 
 def list_to_string(lst):
     return ', '.join(map(str, lst))
+
+
+predicate_list = [['predicate', 'Output',
+                   'attribute 1; attribute 2; attribute 3; attribute 4; attribute 5; attribute 6; attribute 7; attribute 8; attribute 9; attribute 10; attribute 11; attribute 12'],
+                  ['predicate', 'Output', 'HTRC; Hazmat Exception; UNID'],
+                  ['JP NON-LIBAT Predicates', 'Ground/Hazmat_\u200bJP',
+                   'HTRC: in 2.1, 2.2, 2.3, 3, 4.1, 4.2, 4.3, 5.1, 5.2, 6.1, 6.2, 8, 9; Hazmat Exception: in JP_FDL, JP_LimitedQuantity, JP_LithiumBattery, JP_MagnetizedMaterial, JP_MediumLithiumIonBattery, JP_MediumLithiumMetalBattery, JP_SmallGlue'],
+                  ['JP NON-LIBAT Predicates', 'JAPAN_\u200bPOST_\u200bMAIL eligible',
+                   'HTRC: in 2.1, 2.2, 4.1, 5.1, 5.2, 6.1, 6.2, 8, 9; Hazmat Exception: in JP_GroundOnly'],
+                  ['JP NON-LIBAT Predicates', 'Air-\u200beligible',
+                   'HTRC: in 3; Hazmat Exception: in JP_GroundOnly; UNID: in NA1993, UN0000'],
+                  ['JP NON-LIBAT Predicates', 'Ground/Hazmat_\u200bJP',
+                   'HTRC: Not Exists or not in 3; Hazmat Exception: in JP_GroundOnly; UNID: in NA1993, UN0000'],
+                  ['JP NON-LIBAT Predicates', 'Ground/Hazmat_\u200bJP',
+                   'HTRC: Not Exists or not in 2.1, 2.2, 4.1, 5.1, 5.2, 6.1, 6.2, 8, 9; Hazmat Exception: in JP_GroundOnly; UNID: Not Exists or not in NA1993, UN0000'],
+                  ['JP NON-LIBAT Predicates', 'JP_\u200bNo\u200bAir any HTRC',
+                   'HTRC: in 2.1, 2.2, 2.3, 3, 4.1, 4.2, 4.3, 5.1, 5.2, 6.1, 6.2, 8, 9; Hazmat Exception: in JP_NoAir'],
+                  ['JP NON-LIBAT Predicates', 'Lithium Battery',
+                   'HTRC: in 9; Hazmat Exception: in JP_SmallLithiumIonBatteryInEquipment, JP_SmallLithiumIonBatteryStandalone, JP_SmallLithiumIonBatteryWithEquipment, JP_SmallLithiumMetalBatteryInEquipment, JP_SmallLithiumMetalBatteryOverEquipmentException, JP_SmallLithiumMetalBatteryStandalone, JP_SmallLithiumMetalBatteryWithEquipment'],
+                  ['JP NON-LIBAT Predicates', 'Misclassified',
+                   'HTRC: Not Exists or not in 9; Hazmat Exception: in JP_SmallLithiumIonBatteryInEquipment, JP_SmallLithiumIonBatteryStandalone, JP_SmallLithiumIonBatteryWithEquipment, JP_SmallLithiumMetalBatteryInEquipment, JP_SmallLithiumMetalBatteryOverEquipmentException, JP_SmallLithiumMetalBatteryStandalone, JP_SmallLithiumMetalBatteryWithEquipment'],
+                  ['JP NON-LIBAT Predicates', 'Unregulated',
+                   'HTRC: in 2.1, 2.2, 3, 4.1, 5.1, 5.2, 6.1, 8, 9; Hazmat Exception: in JP_Unregulated'],
+                  ['JP NON-LIBAT Predicates', 'Misclassified',
+                   'HTRC: Not Exists or not in 2.1, 2.2, 3, 4.1, 5.1, 5.2, 6.1, 8, 9; Hazmat Exception: in JP_Unregulated'],
+                  ['JP NON-LIBAT Predicates', 'Missing valid hazmat exception',
+                   'HTRC: in 2.1, 2.2, 2.3, 3, 4.1, 4.2, 4.3, 5.1, 5.2, 6.1, 6.2, 8, 9; Hazmat Exception: Not Exists or not in JP_FDL, JP_GroundOnly, JP_LimitedQuantity, JP_LithiumBattery, JP_MagnetizedMaterial, JP_MediumLithiumIonBattery, JP_MediumLithiumMetalBattery, JP_NoAir, JP_SmallGlue, JP_SmallLithiumIonBatteryInEquipment, JP_SmallLithiumIonBatteryStandalone, JP_SmallLithiumIonBatteryWithEquipment, JP_SmallLithiumMetalBatteryInEquipment, JP_SmallLithiumMetalBatteryOverEquipmentException, JP_SmallLithiumMetalBatteryStandalone, JP_SmallLithiumMetalBatteryWithEquipment, JP_Unregulated'],
+                  ['JP NON-LIBAT Predicates', 'Hazmat missing exception',
+                   'HTRC: in 2.1, 2.2, 2.3, 3, 4.1, 4.2, 4.3, 5.1, 5.2, 6.1, 6.2, 8, 9; Hazmat Exception: Not Exists'],
+                  ['JP NON-LIBAT Predicates', 'None',
+                   'HTRC: Not Exists or not in 2.1, 2.2, 2.3, 3, 4.1, 4.2, 4.3, 5.1, 5.2, 6.1, 6.2, 8, 9']]
+
+
+# print(predicate_list)
+
+# Code to get all attributes used in each line item of policy when end to end line is in column 3
+def get_all_attr_used(predicate_policy_list):
+    predicate_list = predicate_policy_list
+    index_of_item = 0
+    for item in predicate_list:
+        print(item)
+        item.append("attributes used: ")
+        if item[0] == 'predicate':
+            item[3] = item[3] + item[2]
+            if predicate_list[index_of_item + 1][0] == 'predicate':
+                item[2] = "End to End Line"
+                item[3] = "AAll attributes of domain - "
+            else:
+                predicate_list[index_of_item][0] = predicate_list[index_of_item + 1][0]
+                item[3] = item[3][17:]
+        else:
+            pred_list = predicate_list[index_of_item][2].split("; ")
+            for pred_item in pred_list:
+                pred_string = pred_item.split(": ")[0]
+                item[3] = item[3] + ", " + pred_string
+            item[3] = item[3][19:]
+        index_of_item = index_of_item + 1
+    for item in predicate_list:
+        print(item)
+
+    all_attributes_of_domain = []
+    for item in predicate_list:
+        print(item)
+        if "; " in item[3]:
+            item_list = item[3].split("; ")
+        else:
+            item_list = item[3].split(", ")
+        for attr in item_list:
+            all_attributes_of_domain.append(attr)
+    all_attributes_of_domain = list(set(all_attributes_of_domain))
+    all_attributes_of_domain.sort()
+    print(all_attributes_of_domain)

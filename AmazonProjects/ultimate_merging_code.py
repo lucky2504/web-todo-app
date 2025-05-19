@@ -1,5 +1,3 @@
-#Simplified merging code for predicate data
-
 import win32com.client
 import os
 import Functions as fu
@@ -8,10 +6,7 @@ excel = None
 wb = None
 
 try:
-    # Get the workbook name
-    filepath = input("Please provide the filepath to the workbook: ")
-
-    # Opening the workbook
+    filepath = input("Please provide the filepath to the workbook: ") # Get the workbook name
     file_path = os.path.abspath(filepath) # Get absolute path of the Excel file
     excel = win32com.client.Dispatch("Excel.Application") # Create Excel application object
     excel.Visible = True # Make Excel visible
@@ -22,13 +17,28 @@ try:
     predicate_start_col = ord(input("Please provide the start column of predicate data (excluding predicate column): ").upper())
     predicate_end_col = ord(input("Please provide the end column of predicate data: ").upper())
     pred_column_list = [chr(i) for i in range(predicate_start_col, predicate_end_col + 1)] # Create list using list comprehension
-    print("Attribute columns of predicate data: ")
-    print(pred_column_list)
 
     pol_pred = "predicate"
     predicate_list = fu.get_pol_pred_list(predicate_sheet,pred_column_list,pol_pred)
     print("Predicate List: ")
     print(predicate_list)
+
+    index_of_item = 0
+    for item in predicate_list:
+        if item[0] == 'predicate':
+            if predicate_list[index_of_item + 1] [0] == 'predicate':
+                predicate_list[index_of_item].append("attributes used")
+            else:
+                predicate_list[index_of_item][0].replace(predicate_list[index_of_item + 1][0])
+
+        else:
+            pred_list = predicate_list[index_of_item][2].split("; ")
+            pred_string = "attributes: "
+            for item in pred_list:
+                pred_string = pred_string + item.split(": ")[0]
+            predicate_list[index_of_item].append(pred_string)
+
+
 
     #printing predicate data in new sheet
     # Add new worksheet
