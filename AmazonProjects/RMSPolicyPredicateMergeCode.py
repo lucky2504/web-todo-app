@@ -62,6 +62,25 @@ try:
     for item in expanded_policy_list:
         print(item)
 
+    expanded_policy_list = fu.get_all_attr_used(expanded_policy_list)
+
+    all_attributes_of_domain = []
+
+    for item in expanded_policy_list:
+        if item[1] == 'Output':
+            pass
+        else:
+            if "; " in item[3]:
+                item_list = item[3].split("; ")
+            else:
+                item_list = [item[3]]
+            for attr in item_list:
+                attr_headr = attr.split(": ")[0]
+                all_attributes_of_domain.append(attr_headr)
+    all_attributes_of_domain = list(set(all_attributes_of_domain))
+    all_attributes_of_domain.sort()
+    print(all_attributes_of_domain)
+
     #Print Expanded Policy List
     #Add new worksheet
     ws = wb.Sheets.Add()
