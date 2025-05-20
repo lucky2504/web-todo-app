@@ -1,5 +1,8 @@
 #Functions for policy and predicate data merging
+import win32com.client
+import os
 from itertools import product
+
 
 def get_pol_pred_list(policysheet, pol_pred_column_list, pol_pred):
     # Select the sheet with "policies" data
@@ -250,3 +253,84 @@ def get_all_attr_used(predicate_policy_list):
     all_attributes_of_domain = list(set(all_attributes_of_domain))
     all_attributes_of_domain.sort()
     print(all_attributes_of_domain)
+
+#Change headers of predicate and policy columns
+def change_headers(pol_pred_list):
+    for index_of_item in range(len(pol_pred_list) - 1):  # Stop one item before the end
+        current_item = pol_pred_list[index_of_item]
+        next_item = pol_pred_list[index_of_item + 1]
+
+        if current_item[0] in ['policy', 'predicate']:
+            if next_item[0] in ['policy', 'predicate']:
+                current_item[0] = "Name of policy/predicate"
+                current_item[2] = "E2E_Line"
+            else:
+                current_item[0] = next_item[0]
+
+    return pol_pred_list
+
+def expand_list(first_list,second_list):
+    Policy_list = first_list
+    predicate_list = second_list
+    E2EList = []
+    for policy_line in Policy_list:
+
+        try:
+            if policy_line[0] == "Name of policy/predicate" or policy_line[1] == "Output":
+                E2Epolicyline = policy_line
+                E2Epolicyline.append("E2E_Attribute_Line")
+                E2Epolicyline.append("Predicates used?")
+                # print("policy line")
+            elif "COUNT  " not in policy_line[2]:
+                E2Epolicyline = policy_line
+                E2Epolicyline.append(policy_line[2])
+                E2Epolicyline.append("No")
+                # print("policy line")
+            else:
+                # print("not policy line")
+                E2Epolicyline = policy_line
+
+                attr_header_attr = policy_line[2].split("; ")
+                attr_line = []
+                for attr in attr_header_attr:
+                    if "COUNT  " not in attr:
+                        attr_line.append(attr)
+                    else:
+                        complete_line = []
+                        search_items = parse_count_string(attr)
+                        # print(search_items)
+                        complete_line = get_matching_predicates(predicate_list, search_items)
+                        # print(complete_line)
+                        if complete_line == []:
+                            complete_line = [f"Predicate values did not match for {attr}"]
+                        else:
+                            pass
+                        attr_line.append(complete_line)
+                E2Epolicyline.append(attr_line)
+                E2Epolicyline.append("Yes")
+
+            E2EList.append(E2Epolicyline)
+            # print("for policy line: ")
+            # print(policy_line)
+            # print("E2E policy line: ")
+            # print(E2Epolicyline)
+
+        except Exception as e:
+            print(f"Error processing line: {policy_line}")
+            print(f"Error message: {str(e)}")
+
+    print("E2E List: ")
+    print(E2EList)
+
+
+    expanded_list = []
+    row = 1
+    for policy_item in E2EList:
+        flattened_items = flatten_nested_list(policy_item)
+        for item in flattened_items:
+            expanded_list.append(item)
+            print("Flattened item: ")
+            print(item)
+
+            row += 1
+    return expanded_list
