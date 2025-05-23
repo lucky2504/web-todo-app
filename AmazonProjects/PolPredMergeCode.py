@@ -1,7 +1,7 @@
+
 import win32com.client
 import os
-import Functions as fu
-from AmazonProjects.Functions import change_headers
+import AmazonProjects.PolPredMergeFunctions as fu
 
 excel = None
 wb = None
@@ -21,7 +21,7 @@ try:
 
     pol_pred = "predicate"
     predicate_list = fu.get_pol_pred_list(predicate_sheet,pred_column_list,pol_pred)
-    predicate_list = change_headers(predicate_list)
+    predicate_list = fu.change_headers(predicate_list)
     print("Predicate List: ")
     print(predicate_list)
 
@@ -33,7 +33,7 @@ try:
 
     pol_pred = "policy"
     Policy_list = fu.get_pol_pred_list(policy_sheet,pol_column_list,pol_pred)
-    Policy_list = change_headers(Policy_list)
+    Policy_list = fu.change_headers(Policy_list)
     print("Policy List: ")
     print(Policy_list)
 
@@ -79,6 +79,7 @@ try:
                 all_attributes_of_domain.append(attr_headr)
     all_attributes_of_domain = list(set(all_attributes_of_domain))
     all_attributes_of_domain.sort()
+    print("All domain attributes: ")
     print(all_attributes_of_domain)
 
     #Print Expanded Policy List
@@ -99,12 +100,3 @@ try:
 
 except Exception as e:
     print(f"An error occurred: {str(e)}")
-
-# if "COUNT  " in policy_line[2]:
-#     E2Epolicyline.append("Yes")
-# else:
-#     attr_header_attr = policy_line[2].split("; ")
-#     if check_matches(attr_header_attr, predicate_list):
-#         E2Epolicyline.append("Yes")
-#     else:
-#         E2Epolicyline.append("No")
