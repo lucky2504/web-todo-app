@@ -61,9 +61,11 @@ def parse_rule_text(file_path):
         lst = []
         for i, attr in enumerate(attributes, 1):
             rule_dict[f'Attr {i}'] = attr
-            if ' ' in attr and 'There' not in attr:
-
+            if ' ' in attr and 'There' not in attr and not attr.startswith("The total "):
                 lst.append(attr.split(' ')[0])
+            elif attr.startswith("The total "):
+                attr = attr.split(" is ")[0]
+                lst.append(attr.split(' ')[-1])
 
         lst = list(set(lst))
         rule_dict['Attr 0'] = ', '.join(map(str, lst))
@@ -78,8 +80,17 @@ def parse_rule_text(file_path):
 
     return data
 
+def truncate_long_string(s, max_length=250):
+    if isinstance(s, str) and len(s) > 254:
+        return s[:max_length] + "..."
+    return s
 
 def create_excel(data, output_file):
+    # Truncate long strings in the data
+    for item in data:
+        for key, value in item.items():
+            item[key] = truncate_long_string(value)
+
     data = sorted(data, key=lambda x: x['Rules'])
 
     df = pd.DataFrame(data)
@@ -97,3 +108,5 @@ output_file = "policydata.xlsx"  # Your output file path
 
 data = parse_rule_text(input_file)
 create_excel(data, output_file)
+
+print("Policy data printed in policydata workbook!")
