@@ -77,7 +77,6 @@ def parse_rule_text(file_path):
         for i in range(1, max_attrs + 1):
             if f'Attr {i}' not in rule_dict:
                 rule_dict[f'Attr {i}'] = ''
-
     return data
 
 def truncate_long_string(s, max_length=250):
@@ -101,12 +100,22 @@ def create_excel(data, output_file):
     df = df[base_columns + attr_columns]
     df.to_excel(output_file, index=False)
 
+def get_unique_attrs(data):
+    df = pd.DataFrame(data)
+    unique_attrs = [] # Create a set to store unique attributes
+    for cell in df['Attr 0']: # Process each cell in the 'Attr 0' column
+        attrs = [attribute.strip() for attribute in cell.split(',')] # Split the attributes by comma and strip whitespace
+        for attr in attrs:
+            unique_attrs.append(attr) # Add each attribute to the set
+    unique_attrs = list(set(unique_attrs))
+    return unique_attrs
 
 # Use the functions
 input_file = "xyz.txt"  # Your input file path
 output_file = "policydata.xlsx"  # Your output file path
 
 data = parse_rule_text(input_file)
+policy_data = data
+attributes = get_unique_attrs(policy_data)
 create_excel(data, output_file)
 
-print("Policy data printed in policydata workbook!")
