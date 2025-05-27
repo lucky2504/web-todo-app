@@ -97,7 +97,11 @@ def create_excel(data, output_file):
     base_columns = ['Rules', 'Output mode', 'Output destination', 'Output smg', 'Output tags']
     attr_columns = [col for col in df.columns if col.startswith('Attr ')]
     attr_columns.sort(key=lambda x: int(x.split()[1]))  # Sort attr columns numerically
-    df = df[base_columns + attr_columns]
+    other_columns = [col for col in df.columns if col not in base_columns and col not in attr_columns]
+
+    # Combine all columns in the desired order
+    all_columns = base_columns + attr_columns + other_columns
+    df = df[all_columns]
     df.to_excel(output_file, index=False)
 
 def get_unique_attrs(data):
@@ -110,12 +114,60 @@ def get_unique_attrs(data):
     unique_attrs = list(set(unique_attrs))
     return unique_attrs
 
-# Use the functions
-input_file = "xyz.txt"  # Your input file path
-output_file = "policydata.xlsx"  # Your output file path
+def create_policy_attribute_df(policy_data, attributes):
+    if isinstance(policy_data, list): # Converting policy_data to DataFrame if it's not already
+        df_policy = pd.DataFrame(policy_data) # Assuming policy_data is a list of dictionaries
+    else:
+        df_policy = policy_data
 
-data = parse_rule_text(input_file)
+    base_columns = ['Rules', 'Output mode', 'Output destination', 'Output smg', 'Output tags', 'Attr 0'] # Initialize new dataframe with base columns
+    policy_attribute = pd.DataFrame(columns=base_columns + attributes)
+
+    policy_attribute[base_columns] = df_policy[base_columns] # Copy base columns from policy_data
+
+    for idx, row in df_policy.iterrows(): # For each row in policy_data
+        attr_conditions = {attr: [] for attr in attributes} # Dictionary to collect all conditions for each attribute
+
+        for col in df_policy.columns: # For each attribute column in original data (Attr 1, Attr 2, etc.)
+            if col.startswith('Attr ') and col != 'Attr 0':
+                value = row[col]
+                if pd.isna(value) or str(value).strip() == '':
+                    continue
+
+                value = str(value)
+
+                for attr in attributes: # Check for each attribute in this cell
+                    if attr in value:
+                        condition = value.split(attr)[1].strip() # Split by attribute and take what comes after
+                        if condition:  # Only add if there's something after the split
+                            attr_conditions[attr].append(condition)
+
+        for attr, conditions in attr_conditions.items(): # Combine all conditions for each attribute and set in the dataframe
+            if conditions:  # Only set if we found conditions
+                policy_attribute.at[idx, attr] = '; '.join(conditions)
+
+    return policy_attribute
+
+# Use the functions
+input_file = "xyz.txt"  # Input file path
+output_file = "policydata.xlsx"  # Output file path
+
+data = parse_rule_text(input_file) # Parse the input file and create initial Excel
 policy_data = data
-attributes = get_unique_attrs(policy_data)
 create_excel(data, output_file)
 
+attributes = get_unique_attrs(policy_data) # Get unique attributes and create policy attribute DataFrame
+policy_attribute = create_policy_attribute_df(policy_data, attributes)
+
+policy_attribute_dict = policy_attribute.to_dict('records') # Convert DataFrame to list of dictionaries and create final Excel
+output_file = "policydatawithattributes.xlsx"
+create_excel(policy_attribute_dict, output_file)
+
+#Generate JSON files
+
+# Generate JSON for policydata.xlsx
+df_policy = pd.DataFrame(data)
+df_policy.to_json('policydata.json', orient='records', indent=4)
+
+# Generate JSON for policydatawithattributes.xlsx
+policy_attribute.to_json('policydatawithattributes.json', orient='records', indent=4)
