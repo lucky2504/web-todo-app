@@ -17,16 +17,15 @@ def create_policy_end_to_end_line(file_path):
             continue
 
         lines = rule.strip().split('\n')
+        line_count = len(lines) - 5
 
-        # Get rule name
-        rule_name = lines[0].split('_')[0]
+        rule_name = lines[0].rsplit('_', 1)[0] # Get rule name
 
         # Initialize other fields
         output_mode = ''
         output_destination = ''
         output_smg = ''
         output_tags = ''
-        policy_text = ''
 
         attributes = []  # Store attributes in a list
 
@@ -57,6 +56,7 @@ def create_policy_end_to_end_line(file_path):
             'Output destination': output_destination,
             'Output smg': output_smg,
             'Output tags': output_tags,
+            'Line Count': line_count,
             'Policy Text': policy_text,
         }
 
@@ -98,7 +98,7 @@ def create_policy_attribute_df(policy_data, attributes):
     else:
         df_policy = policy_data
 
-    base_columns = ['Rules', 'Output mode', 'Output destination', 'Output smg', 'Output tags', 'Policy Text', 'Attr 0'] # Initialize new dataframe with base columns
+    base_columns = ['Rules', 'Output mode', 'Output destination', 'Output smg', 'Output tags', 'Line Count', 'Policy Text', 'Attr 0'] # Initialize new dataframe with base columns
     policy_attribute = pd.DataFrame(columns=base_columns + attributes)
 
     policy_attribute[base_columns] = df_policy[base_columns] # Copy base columns from policy_data
@@ -126,8 +126,9 @@ def create_policy_attribute_df(policy_data, attributes):
 
     return policy_attribute
 
-input_file = "xyz.txt"
+input_file = "textdump.txt"
 policy_text_data = create_policy_end_to_end_line(input_file)
+policy_text_data = sorted(policy_text_data, key=lambda x: x['Rules'])
 attributes = get_unique_attrs(policy_text_data) # Get unique attributes and create policy attribute DataFrame
 policy_attribute = create_policy_attribute_df(policy_text_data, attributes)
 
