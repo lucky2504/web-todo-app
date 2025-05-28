@@ -126,7 +126,7 @@ def create_policy_attribute_df(policy_data, attributes):
 
     return policy_attribute
 
-input_file = "textdump.txt"
+input_file = "text_dump.txt"
 policy_text_data = create_policy_end_to_end_line(input_file)
 policy_text_data = sorted(policy_text_data, key=lambda x: x['Rules'])
 attributes = get_unique_attrs(policy_text_data) # Get unique attributes and create policy attribute DataFrame
