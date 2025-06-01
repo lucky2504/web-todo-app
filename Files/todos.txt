@@ -1,7 +1,6 @@
 Learn Python
-Complete upto week 20
+Completed
 Program
-Fight
 Code
 Oust
 Fix a bug
@@ -13,3 +12,6 @@ Sleep today
 Build gui
 Master Python now
 Learn to build a window
+Fir kis baat ki dheri hai
+Completed
+

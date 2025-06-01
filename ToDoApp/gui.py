@@ -27,8 +27,8 @@ window = sg.Window('My To-Do App',
                    font=('Helvetica',20)) #Parent object containing all the above objects
 
 while True:
-    event, values = window.read(timeout=60000) #Displays the window
-    window["clock"].update(value = time.strftime("%b %d, %Y %H:%M:%S"))
+    event, values = window.read(timeout=6000) #Displays the window
+    window["clock"].update(value = time.strftime("%b %d, %Y %H:%M"))
     print(1, event)
     print(2, values)
     print(3, values['todos'])
