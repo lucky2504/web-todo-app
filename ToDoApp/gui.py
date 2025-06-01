@@ -1,9 +1,15 @@
 #using a third party module/library - created by other people which we can use in Python. Can be found on pypi.org
 #Download the 3rd party module from settings or enter the installation line in TERMINAL (not Python Console)
+#In the terminal  pyinstaller --onefile --windowed --clean gui.py
 
 import functions
 import FreeSimpleGUI as sg
 import time
+import os
+
+if not os.path.exists("todos.txt"):
+    with open("todos.txt", "w") as file:
+        pass
 
 sg.theme("Black")
 
