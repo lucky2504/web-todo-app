@@ -17,22 +17,28 @@ def create_policy_end_to_end_line(file_path):
             continue
 
         lines = rule.strip().split('\n')
-        line_count = len(lines) - 3
+        line_count = len(lines) - 5
 
         rule_name = lines[0].rsplit('_', 1)[0] # Get rule name
 
         # Initialize other fields
-        shipOptions = ''
-        restrictionAction = ''
+        boxClass = ''
+        minHeight = ''
+        minLength = ''
+        minWidth = ''
 
         attributes = []  # Store attributes in a list
 
         for line in lines[1:]:
             line = line.strip()
-            if 'shipOptions |' in line:
-                shipOptions = line.split('|')[0].strip()[:-12] + ": " + line.split('|')[1].strip()
-            elif 'restrictionAction |' in line:
-                restrictionAction = line.split('|')[0].strip()[:-18] + ": " + line.split('|')[1].strip()
+            if 'boxClass |' in line:
+                boxClass = line.split('|')[0].strip()[:-8] + ": " + line.split('|')[1].strip()
+            elif 'minHeight |' in line:
+                minHeight = line.split('|')[0].strip()[:-9] + ": " + line.split('|')[1].strip()
+            elif 'minLength |' in line:
+                minLength = line.split('|')[0].strip()[:-9] + ": " + line.split('|')[1].strip()
+            elif 'minWidth |' in line:
+                minWidth = line.split('|')[0].strip()[:-8] + ": " + line.split('|')[1].strip()
             elif line and not line.startswith('Rule:') and '|' not in line:
                 line = line.strip()
                 if line:
@@ -46,8 +52,10 @@ def create_policy_end_to_end_line(file_path):
         # Create rule dictionary
         rule_dict = {
             'Rules': rule_name,
-            'Ship Options': shipOptions,
-            'Restriction Action': restrictionAction,
+            'boxClass': boxClass,
+            'minHeight': minHeight,
+            'minLength': minLength,
+            'minWidth': minWidth,
             'Line Count': line_count,
             'Policy Text': policy_text,
         }
@@ -90,7 +98,7 @@ def create_policy_attribute_df(policy_data, attributes):
     else:
         df_policy = policy_data
 
-    base_columns = ['Rules', 'Ship Options', 'Restriction Action', 'Line Count', 'Policy Text', 'Attr 0'] # Initialize new dataframe with base columns
+    base_columns = ['Rules', 'boxClass', 'minHeight', 'minLength', 'minWidth', 'Line Count', 'Policy Text', 'Attr 0'] # Initialize new dataframe with base columns
     policy_attribute = pd.DataFrame(columns=base_columns + attributes)
 
     policy_attribute[base_columns] = df_policy[base_columns] # Copy base columns from policy_data
@@ -118,7 +126,7 @@ def create_policy_attribute_df(policy_data, attributes):
 
     return policy_attribute
 
-input_file = ("text_dump.txt")
+input_file = "text_dump.txt"
 policy_text_data = create_policy_end_to_end_line(input_file)
 policy_text_data = sorted(policy_text_data, key=lambda x: x['Rules'])
 attributes = get_unique_attrs(policy_text_data) # Get unique attributes and create policy attribute DataFrame
