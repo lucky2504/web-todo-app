@@ -1,7 +1,5 @@
-#streamlit run webtodo.py
 #How streamlit actually works?
 # pip freeze > requirements.txt to get all required apps
-
 
 import streamlit as st
 import functions
@@ -13,8 +11,7 @@ def add_todo():
     todos.append(todo)
     functions.write_todos(todos)
 
-st.title("My Todo App")
-st.subheader("This is my todoapp!")
+st.title("Lucky's Todos")
 st.write('To increase productivity!')
 
 for index, todo in enumerate(todos):
