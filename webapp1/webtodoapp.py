@@ -1,5 +1,10 @@
 #How streamlit actually works?
 # pip freeze > requirements.txt to get all required apps
+#streamlit run webtodo.py
+#How streamlit actually works?
+#To run the app, in Terminal type "streamlit run webtodo.py"
+#For web app, in terminal type "pip freeze > requirements.txt"
+#That should create a requirements .txt file in the project which will have all the required packages to be in installed in the server
 
 import streamlit as st
 import functions
