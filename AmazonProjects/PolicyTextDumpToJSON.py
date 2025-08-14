@@ -1,7 +1,8 @@
 import pandas as pd
 from streamlit.elements.widgets.camera_input import CameraInputSerde
 
-input_file = "TRANSPORTATION_FE.txt"
+filepath = "Text Dump DATA/BOX_EU.txt"
+input_file = filepath.split('/')[1]
 filename = input_file.split('.')[0]
 DOMAIN = filename.split('_')[0]
 STACK = filename.split('_')[1]
@@ -16,8 +17,8 @@ match DOMAIN:
         output_strings = []
         attributes = ['marketplace', 'rablId', 'restrictedDestinations', 'permittedModes', 'addressTypes', 'hazmat_exception', 'hazmat_united_nations_regulatory_id', 'hazmat_transportation_regulatory_class', 'fulfillmentManagerId', 'battery.lithium_metal', 'battery.lithium_ion']
     case 'BOX':
-        output_cols = []
-        output_strings = []
+        output_cols = ['boxClass', 'minHeight','minLength','minWidth']
+        output_strings = [' boxClass |',' minHeight |',' minLength |',' minWidth |']
         attributes = ['OriginOrgUnit', 'DestinationCountry', 'DestinationPostalCode', 'hazmat_exception', 'hazmat_transportation_regulatory_class', 'hazmat_united_nations_regulatory_id', 'sioc_capable', 'regulated_sioc_override', 'package_level']
     case 'RETURNS':
         output_cols = []
@@ -123,22 +124,21 @@ def create_rule_analysis_df(file_path, DOMAIN, STACK, attributes, output_cols, o
     df = pd.DataFrame(data)
     return df
 
-df = create_rule_analysis_df(input_file, DOMAIN, STACK, attributes, output_cols, output_strings)
+df = create_rule_analysis_df(filepath, DOMAIN, STACK, attributes, output_cols, output_strings)
 
 # Defining the column order
 base_columns = ['DOMAIN', 'STACK', 'RULE', 'RULE_OUTPUT', 'POLICY_TEXT', 'ATTRIBUTES_USED', 'ORDER_OF_ATTRIBUTES', 'LINE_COUNT', 'CHAR_COUNT']
-output_column_order = ['Output mode', 'Output smg', 'Output destination', 'Output tags']
 
 # Create final column order list
-final_column_order = base_columns + output_column_order + attributes
+final_column_order = base_columns + output_cols + attributes
 
 # Sort DataFrame by RULE column and reorder columns
 df_sorted = df.sort_values('RULE')[final_column_order]
 
 # Save to JSON
-df_sorted.to_json('policy_analysis.json', orient='records', indent=4)
-
-# Or with more control:
+output_filename = f"policyattribute_{filename}.json"
 json_output = df_sorted.to_json(orient='records', indent=4)
-with open('policy_analysis.json', 'w') as f:
+
+#Write data into output file
+with open(output_filename, 'w') as f:
     f.write(json_output)
