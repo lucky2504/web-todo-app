@@ -7,9 +7,10 @@ datetime_string = datetime.now().strftime('%Y%m%d%H%M')
 
 # Path to the folder containing text files
 folder_path = "Text Dump DATA"
+keyword = input("Enter the keyword to search for: ")
 
 # Get list of all .txt files in the folder
-txt_files = [f for f in os.listdir(folder_path) if f.endswith('.txt')]
+txt_files = [f for f in os.listdir(folder_path) if f.endswith('.txt') and keyword.lower() in f.lower()]
 
 # Loop through each text file
 for input_file in txt_files:
