@@ -48,7 +48,7 @@ for input_file in txt_files:
             output_cols = ['dropZone','storageClass','storageLevel']
             output_strings = [' dropZone |',' storageClass |',' storageLevel |']
             attributes = ['org', 'Country', 'hazmat_exception', 'hazmat_regulatory_packing_group', 'hazmat_transportation_regulatory_class', 'hazmat_united_nations_regulatory_id', 'product_category', 'product_subcategory', 'product_type', 'product_type_name', 'restricted_product_class', 'state_of_matter', 'alcohol_content', 'eu2008_labeling_hazard', 'ghs_statement', 'gl_product_group', 'gl_product_group_type', 'item_hazmat_volume', 'item_hazmat_weight', 'package_level']
-        case 'DONATIONS':
+        case 'DONATION':
             output_cols = ['donationEligible','outputReasonAttributes']
             output_strings = [' donationEligible |',' outputReasonAttributes |']
             attributes = ['Country', 'gl_product_group_type', 'product_subcategory', 'isSellerOptedIn', 'is_fba', 'asinStatus', 'blocked_waste_category', 'check_distribution_type', 'distribution_type', 'has_memory', 'hazmat_transportation_regulatory_class', 'is_quarantined', 'Manufacture_on_demand_id', 'storageClassSet', 'website_rejected']
