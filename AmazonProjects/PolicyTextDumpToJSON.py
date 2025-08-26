@@ -55,7 +55,7 @@ for input_file in txt_files:
         case 'MESSAGING':
             output_cols = ['messageId']
             output_strings = [' messageId |']
-            attributes = ['domain', 'org', 'storageRecommendation', 'maq_hard_capacity_breach', 'Domain Name', 'hazmat_exception', 'hazmat_transportation_regulatory_class', 'hazmat_united_nations_regulatory_id', 'InvalidorTombstonedASIN', 'product_compliance_approved', 'restricted_product_class', 'storageClass', 'storageClassSet', 'utc_classification', 'warehouse_process']
+            attributes = ['domain', 'org', 'storageRecommendation', 'maq_hard_capacity_breach', 'hazmat_exception', 'hazmat_transportation_regulatory_class', 'hazmat_united_nations_regulatory_id', 'InvalidorTombstonedASIN', 'product_compliance_approved', 'restricted_product_class', 'storageClass', 'storageClassSet', 'utc_classification', 'warehouse_process']
         case 'WASTE':
             output_cols = ['wasteCategory','wasteCategoryType','wasteType','wasteStorageClass']
             output_strings = [' wasteCategory |',' wasteCategoryType |',' wasteType |',' wasteStorageClass |']
