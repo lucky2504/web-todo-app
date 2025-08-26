@@ -90,7 +90,7 @@ for input_file in txt_files:
 
             rule_dict['DOMAIN'] = DOMAIN
             rule_dict['STACK'] = STACK
-            rule_dict['RULE'] = lines[0].rsplit('_', 1)[0]
+            rule_dict['RULE'] = lines[0].rsplit('_', 1)[0].strip()
             rule_dict['LINE_COUNT'] = str(line_count)
             rule_dict['DownloadDate'] = DownloadDate
 
