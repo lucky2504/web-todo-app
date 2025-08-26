@@ -59,7 +59,7 @@ def versionjsontopolicy(file_path, region):
                 'Version Set Link': version_set_link,
                 'Version Set Number': version_number,
                 'Version Status': version_status,
-                'Policy Name': rule.get('metricName', ''),
+                'Policy Name': rule.get('metricName', '').strip(),
                 'Policy Id': policy_id,
                 'Policy Version': policy_version,
                 'Policy Predicate': json.dumps(rule.get('predicate', {}), ensure_ascii=False),
