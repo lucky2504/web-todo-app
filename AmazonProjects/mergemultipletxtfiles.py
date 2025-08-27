@@ -6,6 +6,7 @@ from datetime import datetime
 def merge_files():
     # Get inputs from user
     folder_path = "Text Dump DATA"
+    output_folder = "PolicyTextFilesForMerging"
     keyword = input("Enter the keyword to search for: ")
 
     # Validate folder path
@@ -40,7 +41,7 @@ def merge_files():
 
         if merged_data:
             # Write merged data to output file in the specified folder
-            output_path = os.path.join(folder_path, output_file)
+            output_path = os.path.join(output_folder, output_file)
             with open(output_path, 'w', encoding='utf-8') as outfile:
                 json.dump(merged_data, outfile, indent=4)
 
