@@ -68,7 +68,7 @@ for input_file in txt_files:
             raise ValueError(f"Unknown domain: {DOMAIN}")
 
     def create_rule_analysis_df(file_path, DOMAIN, STACK, attributes, output_cols, output_strings):
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf-8') as file:
             content = file.read()
 
         number_of_output_cols = len(output_cols) + 1
