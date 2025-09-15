@@ -43,7 +43,7 @@ for input_file in txt_files:
         case 'LABELING':
             output_cols = ['batteryStatements','secondaryLabels','unidStatements','palletLabels','packLabels','hazmatLabelStatementsIdentifier']
             output_strings = [' batteryStatements |',' secondaryLabels |',' unidStatements |',' palletLabels |',' packLabels |',' hazmatLabelStatementsIdentifier |']
-            attributes = ['Country', 'DestinationCountry', 'hazmat_exception', 'hazmat_transportation_regulatory_class', 'hazmat_united_nations_regulatory_id', 'is_international', 'battery_cell_composition']
+            attributes = ['Country', 'DestinationCountry', 'hazmat_exception', 'hazmat_transportation_regulatory_class', 'hazmat_united_nations_regulatory_id', 'is_international', 'battery_cell_composition', 'program_participation']
         case 'STORAGE':
             output_cols = ['dropZone','storageClass','storageLevel']
             output_strings = [' dropZone |',' storageClass |',' storageLevel |']
