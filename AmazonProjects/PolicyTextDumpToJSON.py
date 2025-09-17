@@ -1,3 +1,5 @@
+#Run -> 1. PolicyTextDumpToJSON; 2. mergemultipletextfiles; 3. MergePolicyTextFilesOfAllDomains; 4. get_attributes_list
+
 import pandas as pd
 import os
 from datetime import datetime
