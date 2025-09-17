@@ -2,7 +2,7 @@ import json
 import pandas as pd
 
 # Read the JSON file
-with open('combined_output1.json', 'r') as file:
+with open('combined_output.json', 'r') as file:
     data = json.load(file)
 
 # Extract required columns
