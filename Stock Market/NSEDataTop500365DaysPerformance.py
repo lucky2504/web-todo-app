@@ -43,7 +43,7 @@ def fetch_stock_data(symbol, start_date, end_date):
 def main():
     # Set date range for last 15 days
     end_date = datetime.now()
-    start_date = end_date - timedelta(days=15)
+    start_date = end_date - timedelta(days=365)
 
     print(f"Fetching data for {len(NIFTY_STOCKS)} stocks...")
     print(f"Date range: {start_date.date()} to {end_date.date()}")
@@ -88,7 +88,7 @@ def main():
         summary_df['Avg_Volume'] = final_df.groupby('Symbol')['Volume'].mean().values
 
         # Save detailed data
-        output_file = "../nifty_stocks_top_500_10days_detailed.xlsx"
+        output_file = "../nifty_stocks_top_500_365days_detailed.xlsx"
         final_df.to_excel(output_file, index=False)
 
         # Save summary data
