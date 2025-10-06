@@ -7,7 +7,7 @@ import time
 # You can add more symbols to this list
 NIFTY_STOCKS = [
 
-'RELIANCE','HDFCBANK','BHARTIARTL','TCS','ICICIBANK','SBIN'
+'TATAINVEST','HINDCOPPER','MUTHOOTFIN','AGARWALEYE','NAM-INDIA',
 
 ]
 
@@ -88,7 +88,7 @@ def main():
         summary_df['Avg_Volume'] = final_df.groupby('Symbol')['Volume'].mean().values
 
         # Save detailed data
-        output_file = "../nifty_stocks_top_500_10days_detailed.xlsx"
+        output_file = "../nifty_stocks_top_5_365days_detailed.xlsx"
         final_df.to_excel(output_file, index=False)
 
         # Save summary data
