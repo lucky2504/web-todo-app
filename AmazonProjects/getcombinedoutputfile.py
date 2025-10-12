@@ -38,7 +38,7 @@ def combine_json_files(input_pattern, output_file):
     column_list = list(all_columns.keys())
 
     # Sort combined_data by DOMAIN and STACK
-    combined_data.sort(key=lambda x: (x.get('DOMAIN', ''), x.get('STACK', '')))
+    combined_data.sort(key=lambda x: (x.get('DOMAIN', ''), x.get('STACK', ''), x.get('RULE', ''), x.get('POLICY_TEXT', ''), x.get('POLICY_OUTPUT', '')))
 
     # Second pass: standardize the data and add unique keys
     standardized_data = []
