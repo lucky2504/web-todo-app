@@ -1,3 +1,4 @@
+import pandas as pd
 import json
 from datetime import datetime
 import os
@@ -60,7 +61,7 @@ def create_rule_analysis_df(file_path, DOMAIN, STACK, attributes, output_cols, o
                 line = line.strip()
                 if attr in line:
                     attr_value.append(line.replace(attr, ""))
-            attribute_value = "; ".join(attr_value)
+            attribute_value = ' \n'.join(attr_value)
             rule_dict[attr] = attribute_value
 
         data.append(rule_dict)
@@ -94,8 +95,7 @@ output_strings = [' boxClass |', ' minHeight |', ' minLength |', ' minWidth |',
 attributes = ['OriginOrgUnit', 'DestinationCountry', 'DestinationPostalCode', 'hazmat_exception',
               'hazmat_transportation_regulatory_class', 'hazmat_united_nations_regulatory_id', 'sioc_capable',
               'regulated_sioc_override', 'package_level',
-              'Country', 'DestinationCountry', 'hazmat_exception', 'hazmat_transportation_regulatory_class',
-              'hazmat_united_nations_regulatory_id', 'is_international', 'battery_cell_composition',
+              'Country', 'is_international', 'battery_cell_composition',
               'program_participation']
 
 # Process each file
@@ -103,7 +103,7 @@ for input_file in all_txt_files:
     print(f"\nProcessing file: {input_file}")
 
     # Process the file and add its data to the combined list
-    filepath = os.path.join(script_dir, input_file)
+    file_path = os.path.join(script_dir, input_file)
 
     # Extract filename and domain information
     filename = input_file.split('.')[0]
@@ -140,19 +140,46 @@ for input_file in all_txt_files:
     base_columns = ['DOMAIN', 'STACK', 'RULE', 'RULE_OUTPUT', 'POLICY_TEXT', 'ATTRIBUTES_USED', 'ORDER_OF_ATTRIBUTES', 'LINE_COUNT', 'CHAR_COUNT', 'DownloadDate']
 
     # Create final column order list
-    final_column_order = base_columns + output_cols + attributes
+    final_column_order = ['Serial_Number'] + base_columns + output_cols + attributes
+
+    # Ensure all columns exist in the DataFrame
+    for col in final_column_order:
+        if col not in df.columns:
+            df[col] = None  # or '' for empty string
 
     # Sort DataFrame by RULE column and reorder columns
     df_sorted = df.sort_values('RULE')[final_column_order]
-    all_policy_data.extend(df)
+    all_policy_data.extend(df_sorted.to_dict('records'))
 
 # Sort all combined data
-all_policy_data = sorted(all_policy_data, key=lambda x: x['Policy Name'])
-all_policy_data = sorted(all_policy_data, key=lambda x: x['Region'])
-all_policy_data = sorted(all_policy_data, key=lambda x: x['Domain Name'])
+all_policy_data = sorted(all_policy_data,
+                        key=lambda x: (x['DOMAIN'],
+                                      x['STACK'],
+                                      x['RULE'],
+                                      x['POLICY_TEXT'],
+                                      x['RULE_OUTPUT']))
 
-# Get current datetime
-current_datetime = datetime.now().strftime('%Y%m%d_%H%M%S')
+# Add Serial Number column with reset per unique DOMAIN_STACK_RULE
+current_key = None
+counter = 0
+
+for record in all_policy_data:
+    # Create unique key for DOMAIN_STACK_RULE combination
+    key = f"{record['DOMAIN']}_{record['STACK']}_{record['RULE']}"
+
+    # Reset counter when we encounter a new DOMAIN_STACK_RULE combination
+    if key != current_key:
+        current_key = key
+        counter = 1
+    else:
+        counter += 1
+
+    # Add serial number to the record
+    record['Serial_Number'] = f"{key}_{counter}"
+
+# Create output filename with full path
+output_filename = os.path.join(script_dir, f'masterpolicydata_{current_datetime}.json')
+
 
 # Create output filename with full path
 output_filename = os.path.join(script_dir, f'masterpolicydata_{current_datetime}.json')
