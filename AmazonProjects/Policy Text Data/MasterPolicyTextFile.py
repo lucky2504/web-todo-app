@@ -175,7 +175,7 @@ for record in all_policy_data:
         counter += 1
 
     # Add serial number to the record
-    record['Serial_Number'] = f"{key}_{counter}"
+    record['Serial_Number'] = f"{key}_{counter:05d}"
 
 # Create output filename with full path
 output_filename = os.path.join(script_dir, f'masterpolicydata_{current_datetime}.json')
