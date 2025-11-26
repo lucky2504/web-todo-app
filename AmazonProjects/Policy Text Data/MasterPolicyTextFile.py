@@ -86,17 +86,11 @@ if not all_txt_files:
 all_policy_data = []
 
 current_datetime = datetime.now().strftime('%Y%m%d%H%M')
-output_cols = ['boxClass', 'minHeight', 'minLength', 'minWidth',
-               'batteryStatements', 'secondaryLabels', 'unidStatements', 'palletLabels', 'packLabels',
-               'hazmatLabelStatementsIdentifier']
-output_strings = [' boxClass |', ' minHeight |', ' minLength |', ' minWidth |',
-                  ' batteryStatements |', ' secondaryLabels |', ' unidStatements |', ' palletLabels |', ' packLabels |',
-                  ' hazmatLabelStatementsIdentifier |']
-attributes = ['OriginOrgUnit', 'DestinationCountry', 'DestinationPostalCode', 'hazmat_exception',
-              'hazmat_transportation_regulatory_class', 'hazmat_united_nations_regulatory_id', 'sioc_capable',
-              'regulated_sioc_override', 'package_level',
-              'Country', 'is_international', 'battery_cell_composition',
-              'program_participation']
+output_cols = ['BOX boxClass', 'BOX minHeight', 'BOX minLength', 'BOX minWidth', 'DONATION donationEligible', 'DONATION outputReasonAttributes', 'LABELING batteryStatements', 'LABELING secondaryLabels', 'LABELING unidStatements', 'LABELING palletLabels', 'LABELING packLabels', 'LABELING hazmatLabelStatementsIdentifier', 'MESSAGING messageId', 'RETURNS returnClass', 'SHIPOPTION shipOptions', 'SHIPOPTION restrictionAction', 'STORAGE dropZone', 'STORAGE storageClass', 'STORAGE storageLevel', 'TRANSPORTATION Output mode', 'TRANSPORTATION Output smg', 'TRANSPORTATION Output destination', 'TRANSPORTATION Output tags', 'WASTE wasteCategory', 'WASTE wasteCategoryType', 'WASTE wasteType', 'WASTE wasteStorageClass', 'WASTEPROFILE wasteProfile']
+
+output_strings = [' boxClass |', ' minHeight |', ' minLength |', ' minWidth |', ' donationEligible |', ' outputReasonAttributes |', ' batteryStatements |', ' secondaryLabels |', ' unidStatements |', ' palletLabels |', ' packLabels |', ' hazmatLabelStatementsIdentifier |', ' messageId |', ' returnClass |', ' shipOptions |', ' restrictionAction |', ' dropZone |', ' storageClass |', ' storageLevel |', ' mode |',  ' smg |',  ' destination |',  ' tags |', ' wasteCategory |', ' wasteCategoryType |', ' wasteType |', ' wasteStorageClass |', ' wasteProfile |']
+
+attributes = ['addressTypes', 'alcohol_content', 'asinStatus', 'battery.lithium_ion', 'battery.lithium_metal', 'battery_cell_composition', 'battery_weight', 'blocked_waste_category', 'check_distribution_type', 'contains_liquid_contents', 'Country', 'customer_restriction_type', 'derived.battery_cell_count', 'derived.battery_count', 'DestinationCountry', 'DestinationPostalCode', 'distribution_type', 'domain', 'eu2008_labeling_hazard', 'fallback.item_weight', 'fallback.lithium_ion_battery_count', 'fallback.lithium_metal_battery_count', 'fulfillmentManagerId', 'ghs_statement', 'gl_product_group', 'gl_product_group_type', 'has_memory', 'hazmat_exception', 'hazmat_proper_shipping_name', 'hazmat_regulatory_packing_group', 'hazmat_transportation_regulatory_class', 'hazmat_united_nations_regulatory_id', 'InvalidorTombstonedASIN', 'is_fba', 'is_hazmat', 'is_international', 'is_liquid_double_sealed', 'is_quarantined', 'is_swa', 'isSellerOptedIn', 'item_hazmat_volume', 'item_hazmat_weight', 'liquid_packaging_type', 'liquid_volume', 'lithium_battery_weight', 'Manufacture_on_demand_id', 'maq_hard_capacity_breach', 'marketplace', 'marketplaceId', 'medicine_classification', 'org', 'OriginCountry', 'OriginOrgUnit', 'package_level', 'PackageWeight', 'packing_instruction', 'permittedModes', 'power_source_type', 'product_category', 'product_compliance_approved', 'product_subcategory', 'product_type', 'product_type_name', 'program_participation', 'rablId', 'regulated_sioc_override', 'restricted_product_class', 'restrictedDestinations', 'sbrwp', 'shipper_trust_level', 'sioc_capable', 'state', 'state_of_matter', 'storageClass', 'storageClassSet', 'storageRecommendation', 'utc_classification', 'warehouse_process', 'wasteCategory', 'wasteCategoryType', 'website_rejected', 'website_shipping_weight']
 
 # Process each file
 for input_file in all_txt_files:
