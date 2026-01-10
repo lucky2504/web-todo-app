@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 import glob
 
-def create_rule_analysis_df(file_path, DOMAIN, STACK, attributes, output_cols, output_strings, number_of_output_cols, current_datetime):
+def create_rule_analysis_df(file_path, DOMAIN, STACK, attributes, output_cols, output_strings, current_datetime):
     with open(file_path, 'r', encoding='utf-8', errors='replace') as file:
         content = file.read()
 
@@ -21,9 +21,12 @@ def create_rule_analysis_df(file_path, DOMAIN, STACK, attributes, output_cols, o
 
         rule_dict = {}
         lines = rule.strip().split('\n')
+        output_lines = [line for line in lines[1:6] if ' | ' in line]
+        output_lines = sorted(output_lines, key=len)
+        number_of_output_cols = len(output_lines) + 1
         line_count = len(lines) - number_of_output_cols
 
-        rule_dict['DOMAIN'] = DOMAIN
+        rule_dict['DOMAIN_Name'] = DOMAIN
         rule_dict['STACK'] = STACK
         rule_dict['RULE'] = lines[0].rsplit('_', 1)[0].strip()
         rule_dict['LINE_COUNT'] = str(line_count)
@@ -32,10 +35,10 @@ def create_rule_analysis_df(file_path, DOMAIN, STACK, attributes, output_cols, o
         #Get rule outputs
         outputs = []
         for out_col, out_str in zip(output_cols, output_strings):
-            for line in lines[1:number_of_output_cols]:
+            for line in output_lines:
                 line = line.strip()
                 line = line.rstrip(',')
-                if out_str in line:
+                if out_str.rstrip(' |') in line:
                     outputs.append(out_str.strip() + " "+ line.replace(out_str,""))
                     rule_dict[out_col] = line.replace(out_str,"")
                     break
@@ -62,7 +65,7 @@ def create_rule_analysis_df(file_path, DOMAIN, STACK, attributes, output_cols, o
                 if attr in line:
                     attr_value.append(line.replace(attr, ""))
             attribute_value = ' \n'.join(attr_value)
-            rule_dict[attr] = attribute_value
+            rule_dict[attr.strip()] = attribute_value
 
         data.append(rule_dict)
 
@@ -87,8 +90,8 @@ all_policy_data = []
 
 current_datetime = datetime.now().strftime('%Y%m%d%H%M')
 
-output_cols = ['BOX boxClass',  'BOX minHeight',  'BOX minLength',  'BOX minWidth',  'DONATION donationEligible',  'DONATION donationReason',  'LABELING batteryStatements',  'LABELING unidStatements',  'LABELING palletLabels',  'LABELING packLabels',  'MESSAGING messageId',  'RETURNS returnClass',  'RETURNS returnClasses',  'SHIPOPTION shipOptions',  'SHIPOPTION restrictionAction',  'STORAGE dropZone',  'STORAGE storageClass',  'STORAGE storageLevel',  'STORAGE designatedQuantity',  'TRANSPORTATION Output mode',  'TRANSPORTATION Output smg',  'TRANSPORTATION Output destination',  'TRANSPORTATION Output tags',  'WASTE wasteCategories',  'WASTE wasteCategoryType',  'WASTE wasteType',  'WASTE wasteStorageClass',  'WASTEPROFILE wasteProfiles']
-output_strings = [' boxClass |',  ' minHeight |',  ' minLength |',  ' minWidth |',  ' donationEligible |',  ' donationReason |',  ' batteryStatements |',  ' unidStatements |',  ' palletLabels |',  ' packLabels |',  ' messageIds |',  '  returnClass |',  '  returnClasses |',  ' shipOptions |',  ' restrictionAction |',  '  dropZone |',  ' storageLevel |',  ' storageClass |',  '  designatedQuantity |',  ' mode |',  ' shipMethodGroup |',   ' destination |',   ' tags |',  ' wasteCategories |',  ' wasteCategoryType |',  ' wasteType |',  ' wasteStorageClass |',  ' wasteProfiles |']
+output_cols = ['BOX_boxClass', 'BOX_minHeight', 'BOX_minLength', 'BOX_minWidth', 'REMOVAL_donationEligible', 'REMOVAL_donationReason', 'LABELING_batteryStatements', 'LABELING_unidStatements', 'LABELING_palletLabels', 'LABELING_packLabels', 'MESSAGING_messageIds', 'RETURNS_returnClass', 'RETURNS_returnClasses', 'SHIPOPTION_shipOptions', 'SHIPOPTION_restrictionAction', 'STORAGE_dropZone', 'STORAGE_storageLevel', 'STORAGE_storageClass', 'STORAGE_designatedQuantity', 'TRANSPORTATION_mode', 'TRANSPORTATION_shipMethodGroup', 'TRANSPORTATION_destination', 'TRANSPORTATION_tags', 'WASTE_wasteCategories', 'WASTE_wasteCategoryType', 'WASTE_wasteType', 'WASTE_wasteStorageClass', 'WASTEPROFILE_wasteProfiles']
+output_strings = [ ' boxClass |',  ' minHeight |',  ' minLength |',  ' minWidth |',  ' donationEligible |',  ' donationReason |',  ' batteryStatements |',  ' unidStatements |',  ' palletLabels |',  ' packLabels |',  ' messageIds |',  '  returnClass |',  '  returnClasses |',  ' shipOptions |',  ' restrictionAction |',  '  dropZone |',  ' storageLevel |',  ' storageClass |',  '  designatedQuantity |',  ' mode |',  ' shipMethodGroup |',   ' destination |',   ' tags |',  ' wasteCategories |',  ' wasteCategoryType |',  ' wasteType |',  ' wasteStorageClass |',  ' wasteProfiles |']
 attributes = ['addressTypes ', 'alcoholContent ', 'asinStatus ', 'batteryCellComposition ', 'batteryWeight ', 'blockedWasteCategories ', 'checkDistributionType ', 'containsFoodOrBeverage ', 'containsLiquidContents ', 'country ', 'customerRestrictionType ', 'batteryCellCount ', 'batteryCount ', 'customerReturn ', 'deliveryProgram ', 'destinationCountry ', 'destinationPostalCode ', 'distributionType ', 'domain ', 'eu2008LabelingHazard ', 'eu2008LabelingPrecautionary ', 'eu2008LabelingRisk ', 'eu2008LabelingSafety ', 'expirationDatedProduct ', 'expired ', 'fba ', 'fcStorageMethod ', 'flashpoint ', 'floorRecommendation ', 'fuelType ', 'fulfillmentManagerId ', 'fulfillmentShipmentId ', 'ghsClassificationClass ', 'ghsStatement ', 'ghsStatements ', 'glProductGroup ', 'hazmat ', 'hazmatException ', 'hazmatProperShippingName ', 'hazmatRegulatoryPackingGroup ', 'hazmatTransportationRegulatoryClass ', 'hazmatTransportationRegulatorySubsidiaryClass ', 'hazmatType ', 'hazmatUnitedNationsRegulatoryId ', 'invalidOrTombstonedAsin ', 'inventoryCondition ', 'iog ', 'itemHazmatVolume ', 'itemHazmatWieght ', 'itemName ', 'itemPackageWeight ', 'itemWeight ', 'liquidContentsDescription ', 'liquidDoubleSealed ', 'liquidPackagingType ', 'liquidVolume ', 'lithiumBatteryEnergyContent ', 'lithiumBatteryPackaging ', 'lithiumBatteryVoltage ', 'lithiumBatteryWeight ', 'lithiumIonBatteryCount ', 'lithiumMetalBatteryCount ', 'manufactureOnDemandId ', 'maqHardCapacityBreach ', 'maqSoftCapacityBreach ', 'marketplaceId ', 'medicineClassification ', 'memoryPresent ', 'originCountry ', 'originPostalCode ', 'packageLevel ', 'packageWeight ', 'packingInstruction ', 'permitted ', 'permittedModes ', 'phValue ', 'productComplianceApproved ', 'podRecommendation ', 'powerSourceType ', 'productCategory ', 'productSubCategory ', 'productType ', 'programParticipation ', 'productExpirationType ', 'quantity ', 'quarantined ', 'rablIds ', 'recommendedBrowseNodes ', 'regulatedSiocOverride ', 'restrictedDestinations ', 'restrictedProductClass ', 'sellerId ', 'sellerOptedIn ', 'shipperDangerousGoodsEnabled ', 'shipperTrustLevel ', 'shipperTrustScore ', 'shipWithAmazon ', 'siocCapable ', 'siteId ', 'sponsoredListingCategoryId ', 'state ', 'stateOfMatter ', 'storageClass ', 'storageClasses ', 'storageClassVolumes ', 'storagePermitted ', 'temperatureRating ', 'title ', 'utcClassification ', 'warehouseProcess ', 'wasteBusinessProgram ', 'wasteCategories ', 'wasteCategoryType ', 'websiteRejected ', 'websiteShippingWeight ']
 
 # Process each file
@@ -103,37 +106,13 @@ for input_file in all_txt_files:
     DOMAIN = filename.split('_')[0]
     STACK = filename.split('_')[1]
     DownloadDate = current_datetime
-
-    match DOMAIN:
-        case 'TRANSPORTATION':
-            number_of_output_cols = 5
-        case 'SHIPOPTION':
-            number_of_output_cols = 3
-        case 'BOX':
-            number_of_output_cols = 5
-        case 'RETURNS':
-            number_of_output_cols = 3
-        case 'LABELING':
-            number_of_output_cols = 5
-        case 'STORAGE':
-            number_of_output_cols = 5
-        case 'DONATION':
-            number_of_output_cols = 3
-        case 'MESSAGING':
-            number_of_output_cols = 2
-        case 'WASTE':
-            number_of_output_cols = 5
-        case 'WASTEPROFILE':
-            number_of_output_cols = 2
-        case _:
-            raise ValueError(f"Unknown domain: {DOMAIN}")
-    df = create_rule_analysis_df(file_path, DOMAIN, STACK, attributes, output_cols, output_strings, number_of_output_cols, current_datetime)
+    df = create_rule_analysis_df(file_path, DOMAIN, STACK, attributes, output_cols, output_strings, current_datetime)
 
     # Defining the column order
-    base_columns = ['DOMAIN', 'STACK', 'RULE', 'RULE_OUTPUT', 'POLICY_TEXT', 'ATTRIBUTES_USED', 'ORDER_OF_ATTRIBUTES', 'LINE_COUNT', 'CHAR_COUNT', 'DownloadDate']
+    base_columns = ['DOMAIN_Name', 'STACK', 'RULE', 'RULE_OUTPUT', 'POLICY_TEXT', 'ATTRIBUTES_USED', 'ORDER_OF_ATTRIBUTES', 'LINE_COUNT', 'CHAR_COUNT', 'DownloadDate']
 
     # Create final column order list
-    final_column_order = ['Serial_Number'] + base_columns + output_cols + attributes
+    final_column_order = ['Serial_Number'] + base_columns + output_cols + [attr.strip() for attr in attributes]
 
     # Ensure all columns exist in the DataFrame
     for col in final_column_order:
@@ -146,7 +125,7 @@ for input_file in all_txt_files:
 
 # Sort all combined data
 all_policy_data = sorted(all_policy_data,
-                        key=lambda x: (x['DOMAIN'],
+                        key=lambda x: (x['DOMAIN_Name'],
                                       x['STACK'],
                                       x['RULE'],
                                       x['POLICY_TEXT'],
@@ -158,7 +137,7 @@ counter = 0
 
 for record in all_policy_data:
     # Create unique key for DOMAIN_STACK_RULE combination
-    key = f"{record['DOMAIN']}_{record['STACK']}_{record['RULE']}"
+    key = f"{record['DOMAIN_Name']}_{record['STACK']}_{record['RULE']}"
 
     # Reset counter when we encounter a new DOMAIN_STACK_RULE combination
     if key != current_key:
