@@ -2,11 +2,11 @@ import json
 import glob
 from datetime import datetime
 # Find JSON files containing masterpolicydata* in the name
-matching_files = glob.glob('MasterPolicyTextFile*.json')
+matching_files = glob.glob('masterpolicydata*.json')
 current_datetime = datetime.now().strftime('%Y%m%d%H%M')
 
 if not matching_files:
-    print("No files found matching the pattern 'MasterPolicyTextFile*.json'")
+    print("No files found matching the pattern 'masterpolicydata*.json'")
 else:
     print(f"Found {len(matching_files)} matching file(s):")
 
