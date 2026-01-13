@@ -23,7 +23,7 @@ def create_rule_analysis_df(file_path, DOMAIN, STACK, attributes, attribute_stri
         lines = rule.strip().split('\n')
         line_count = len(lines) - number_of_output_cols
 
-        rule_dict['DOMAIN'] = DOMAIN
+        rule_dict['DOMAIN_Name'] = DOMAIN
         rule_dict['STACK'] = STACK
         rule_dict['RULE'] = lines[0].rsplit('_', 1)[0].strip()
         rule_dict['LINE_COUNT'] = str(line_count)
@@ -132,7 +132,7 @@ for input_file in all_txt_files:
     df = create_rule_analysis_df(file_path, DOMAIN, STACK, attributes, attribute_strings, output_cols, output_strings, number_of_output_cols, current_datetime)
 
     # Defining the column order
-    base_columns = ['DOMAIN', 'STACK', 'RULE', 'RULE_OUTPUT', 'POLICY_TEXT', 'ATTRIBUTES_USED', 'ORDER_OF_ATTRIBUTES', 'LINE_COUNT', 'CHAR_COUNT', 'DownloadDate']
+    base_columns = ['DOMAIN_Name', 'STACK', 'RULE', 'RULE_OUTPUT', 'POLICY_TEXT', 'ATTRIBUTES_USED', 'ORDER_OF_ATTRIBUTES', 'LINE_COUNT', 'CHAR_COUNT', 'DownloadDate']
 
     # Create final column order list
     final_column_order = ['Serial_Number'] + base_columns + output_cols + attributes
@@ -148,7 +148,7 @@ for input_file in all_txt_files:
 
 # Sort all combined data
 all_policy_data = sorted(all_policy_data,
-                        key=lambda x: (x['DOMAIN'],
+                        key=lambda x: (x['DOMAIN_Name'],
                                       x['STACK'],
                                       x['RULE'],
                                       x['POLICY_TEXT'],
@@ -160,7 +160,7 @@ counter = 0
 
 for record in all_policy_data:
     # Create unique key for DOMAIN_STACK_RULE combination
-    key = f"{record['DOMAIN']}_{record['STACK']}_{record['RULE']}"
+    key = f"{record['DOMAIN_Name']}_{record['STACK']}_{record['RULE']}"
 
     # Reset counter when we encounter a new DOMAIN_STACK_RULE combination
     if key != current_key:
