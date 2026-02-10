@@ -25,6 +25,7 @@ def create_rule_analysis_df(file_path, DOMAIN, STACK, attributes, attribute_stri
 
         rule_dict['DOMAIN_Name'] = DOMAIN
         rule_dict['STACK'] = STACK
+        rule_dict['REGULATION'] = lines[0].rsplit('_', 1)[0].strip()
         rule_dict['RULE'] = lines[0].rsplit('_', 1)[0].strip()
         rule_dict['LINE_COUNT'] = str(line_count)
         rule_dict['DownloadDate'] = current_datetime
@@ -130,7 +131,7 @@ for input_file in all_txt_files:
     df = create_rule_analysis_df(file_path, DOMAIN, STACK, attributes, attribute_strings, output_cols, output_strings, number_of_output_cols, current_datetime)
 
     # Defining the column order
-    base_columns = ['DOMAIN_Name', 'STACK', 'RULE', 'RULE_OUTPUT', 'POLICY_TEXT', 'ATTRIBUTES_USED', 'ORDER_OF_ATTRIBUTES', 'LINE_COUNT', 'CHAR_COUNT', 'DownloadDate']
+    base_columns = ['DOMAIN_Name', 'STACK', 'REGULATION', 'RULE', 'RULE_OUTPUT', 'POLICY_TEXT', 'ATTRIBUTES_USED', 'ORDER_OF_ATTRIBUTES', 'LINE_COUNT', 'CHAR_COUNT', 'DownloadDate']
 
     # Create final column order list
     final_column_order = ['Serial_Number'] + base_columns + output_cols + [attr.strip() for attr in attribute_strings]
@@ -148,6 +149,7 @@ for input_file in all_txt_files:
 all_policy_data = sorted(all_policy_data,
                         key=lambda x: (x['DOMAIN_Name'],
                                       x['STACK'],
+                                      x['REGULATION'],
                                       x['RULE'],
                                       x['POLICY_TEXT'],
                                       x['RULE_OUTPUT']))
