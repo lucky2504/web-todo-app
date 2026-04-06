@@ -51,7 +51,7 @@ def versionjsontopolicy(file_path, region):
             policy_version = str(rule.get('policyVersion', ''))
             policy_minor_version = "0"
             policy_link = f"https://decree.aka.amazon.com/policy/{policy_id}/{policy_version}/edit?view={policy_version}&domain={domain_name}"
-            policy_status = "Deployed"
+            policy_status = "DEPLOYED"
 
             rule_dict = {
                 'Domain Name': domain_name,
