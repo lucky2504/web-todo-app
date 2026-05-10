@@ -126,7 +126,7 @@ attributes_re = ['addressTypes','alcohol_content','asinStatus','battery_cell_com
                  'product_compliance_approved','podRecommendation ','power_source_type','product_category','product_subcategory','product_type','program_participation','productExpirationType ','quantity ','is_quarantined','rablId','recommendedBrowseNodes ',
                  'regulated_sioc_override','restrictedDestinations','restricted_product_class','sellerId ','isSellerOptedIn','shipperDangerousGoodsEnabled ','shipper_trust_level','shipperTrustScore ','shippingPrograms','is_swa','sioc_capable','OriginNodeId',
                  'sponsoredListingCategoryId ','state','state_of_matter','storageClass','storageClassSet','storageClassVolumes ','storageRecommendation','temperatureRating ','title ','utc_classification','warehouse_process','wasteBusinessProgram ','wasteCategory',
-                 'wasteCategoryType','website_rejected','website_shipping_weight']
+                 'wasteCategoryType','website_rejected','website_shipping_weight','field']
 
 attribute_strings = ['addressTypes ', 'alcoholContent ', 'asinStatus ', 'batteryCellComposition ', 'batteryWeight ', 'blockedWasteCategories ', 'checkDistributionType ', 'containsFoodOrBeverage ', 'containsLiquidContents ', 'country ', 'customerRestrictionType ',
                      'batteryCellCount ', 'batteryCount ', 'customerReturn ', 'deliveryProgram ', 'destinationCountry ', 'destinationPostalCode ', 'distributionType ', 'domain ', 'eu2008LabelingHazard ', 'eu2008LabelingPrecautionary ', 'eu2008LabelingRisk ',
@@ -138,7 +138,7 @@ attribute_strings = ['addressTypes ', 'alcoholContent ', 'asinStatus ', 'battery
                      'phValue ', 'productComplianceApproved ', 'podRecommendation ', 'powerSourceType ', 'productCategory ', 'productSubCategory ', 'productType ', 'programParticipation ', 'productExpirationType ', 'quantity ', 'quarantined ', 'rablIds ',
                      'recommendedBrowseNodes ', 'regulatedSiocOverride ', 'restrictedDestinations ', 'restrictedProductClass ', 'sellerId ', 'sellerOptedIn ', 'shipperDangerousGoodsEnabled ', 'shipperTrustLevel ', 'shipperTrustScore ', 'shippingPrograms ',
                      'shipWithAmazon ', 'siocCapable ', 'siteId ', 'sponsoredListingCategoryId ', 'state ', 'stateOfMatter ', 'storageClass ', 'storageClasses ', 'storageClassVolumes ', 'storagePermitted ', 'temperatureRating ', 'title ', 'utcClassification ',
-                     'warehouseProcess ', 'wasteBusinessProgram ', 'wasteCategories ', 'wasteCategoryType ', 'websiteRejected ', 'websiteShippingWeight ']
+                     'warehouseProcess ', 'wasteBusinessProgram ', 'wasteCategories ', 'wasteCategoryType ', 'websiteRejected ', 'websiteShippingWeight ','field ']
 
 # Process each file
 for input_file in all_txt_files:
