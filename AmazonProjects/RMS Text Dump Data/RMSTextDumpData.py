@@ -117,7 +117,7 @@ output_strings = [ ' boxClass |',  ' minHeight |',  ' minLength |',  ' minWidth 
                    ' mode |',  ' shipMethodGroup |',   ' destination |',   ' tags |',
                    ' wasteCategories |', ' wasteCategoryType |', ' wasteType |',  ' wasteStorageClass |',
                    ' wasteProfiles |']
-attributes = ['addressTypes ', 'alcoholContent ', 'asinStatus ',
+attributes = ['Variable ','addressTypes ', 'alcoholContent ', 'asinStatus ',
               'batteryCellComposition ', 'batteryCellCount ', 'batteryWeight ', 'batteryCount ', 'blockedWasteCategories ',
               'checkDistributionType ', 'containsFoodOrBeverage ', 'containsLiquidContents ', 'country ', 'customerRestrictionType ', 'customerReturn ',
               'deliveryProgram ', 'destinationCountry ', 'destinationPostalCode ', 'distributionType ', 'domain ',
