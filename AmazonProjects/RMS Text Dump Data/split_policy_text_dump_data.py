@@ -15,7 +15,7 @@ else:
     print(f"Reading data from: {input_file}")
 
     # Read the JSON file
-    with open(input_file, 'r') as f:
+    with open(input_file, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
     print(f"Loaded {len(data)} records from the file")
@@ -33,7 +33,7 @@ else:
         domain_records = [record for record in data if record.get('DOMAIN_Name') == domain]
 
         output_file = f"{current_datetime}_{domain}.txt"
-        with open(output_file, 'w') as f:
+        with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(domain_records, f, indent=4)
 
         print(f"Saved {len(domain_records)} {domain} records to: {output_file}")
